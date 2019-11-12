@@ -14,7 +14,7 @@ import javax.swing.ImageIcon;
 public class NormalEnemy extends Enemy{
 
     public NormalEnemy(int x, int y) {
-        super(x, y, 5, 10, 10, 10);
+        super(x, y, 5, 3, 10, 10);
         image = new ImageIcon(getClass().getResource("/images/img_normalenemy.png")).getImage();
     }
    

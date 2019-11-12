@@ -10,6 +10,7 @@ import tower_game.audio.SoundManager;
 import tower_game.gametile.Road;
 import tower_game.gametile.Spawner;
 import tower_game.gametile.Target;
+import tower_game.gui.GameStage;
 import tower_game.tower.Bullet;
 
 public class Enemy {
@@ -44,7 +45,15 @@ public class Enemy {
     public void changeOrient(ArrayList<GameTile> arrMaps) {
         int xR, yR;
         GameTile afterRoad = null;
-        System.out.println("orient_" + orient + "(" + x +"," + y +")");
+        if(orient == LEFT){
+            System.out.println("orient_LEFT(" + x +"," + y +")");
+        } else if(orient == RIGHT){
+            System.out.println("orient_RIGHT(" + x +"," + y +")");
+        }else if(orient == DOWN){
+            System.out.println("orient_DOWN(" + x +"," + y +")");
+        }else if(orient == UP){
+            System.out.println("orient_UP(" + x +"," + y +")");
+        }
         if(x<-50 || y<-50) return;
         switch (orient) {
             case LEFT:

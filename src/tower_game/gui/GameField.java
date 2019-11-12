@@ -17,7 +17,6 @@ public class GameField extends JPanel implements Runnable
     {
         setBackground(Color.BLACK);
         gameEntity.initGame();
-        gameEntity.start();
         setFocusable(true);
         Thread thread = new Thread(this);
         thread.start();

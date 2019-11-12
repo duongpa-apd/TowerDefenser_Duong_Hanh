@@ -10,7 +10,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import tower_game.enemy.BossEnemy;
 import tower_game.enemy.NormalEnemy;
+import tower_game.enemy.SmallerEnemy;
+import tower_game.enemy.TankerEnemy;
 import tower_game.gametile.EmptyBox;
 import tower_game.gametile.Mountain;
 import tower_game.gametile.Road;
@@ -25,11 +28,15 @@ public class GameEntity {
     private ArrayList<GameTile> arrMaps;
     private int heart;
     private int coin;
+    private int bit;
+    private int orderRow;
     
     //Bắt đầu màn chơi
     public void initGame(){
         heart = 20;
+        bit = 0;
         coin = 200;
+        orderRow = 0;
         arrBullet = new ArrayList<>();
         arrEnemy = new ArrayList<>();
         arrTower = new ArrayList<>();
@@ -38,24 +45,115 @@ public class GameEntity {
     }
     
     public void initBoss(){
-        arrEnemy.add(new NormalEnemy(getSpawner().getX()-25, getSpawner().getY()+7));
-        arrEnemy.add(new NormalEnemy(getSpawner().getX()-125, getSpawner().getY()+7));
-        arrEnemy.add(new NormalEnemy(getSpawner().getX()-225, getSpawner().getY()+7));
-        arrEnemy.add(new NormalEnemy(getSpawner().getX()-335, getSpawner().getY()+7));
-        arrEnemy.add(new NormalEnemy(getSpawner().getX()-445, getSpawner().getY()+7));
-    }
-    
-    public void readBoos(int dong){
-        arrMaps = new ArrayList<>();
+        int orient = start();
+        GameTile spawer = getSpawner();
+        int x = spawer.getX();
+        int y = spawer.getY();
+        int orientStart = start();
+        System.out.println(orientStart);
         File file = new File("src/maps/boss.txt");
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             int row = 0;
             String line = reader.readLine();
             while (line!=null){
-                if(row == dong){
-                    String[] arrInt = line.split(" ");
-                    int numberEnemy = 
+                if(row == orderRow){
+                    String[] arr = line.split(" ");
+                    int numberEnemy = Integer.parseInt(arr[0]);
+                    if(numberEnemy>0){
+                        for(int i=0; i<numberEnemy; i++){
+                            switch(orientStart){
+                                case Enemy.RIGHT:
+                                    x = x-100;
+                                    arrEnemy.add(new NormalEnemy(x,y));
+                                    break;
+                                case Enemy.LEFT:                                        
+                                    x = x+100;
+                                    arrEnemy.add(new NormalEnemy(x,y));
+                                    break;
+                                case Enemy.UP:
+                                    y = y +100;
+                                    arrEnemy.add(new NormalEnemy(x,y));
+                                    break;
+                                case Enemy.DOWN:  
+                                    y = y -100;
+                                    arrEnemy.add(new NormalEnemy(x,y));  
+                                    break;
+                            }
+                        }
+                    }
+                    
+                    numberEnemy = Integer.parseInt(arr[1]);
+                    if(numberEnemy>0){
+                        for(int i=0; i<numberEnemy; i++){
+                            switch(orientStart){
+                                case Enemy.RIGHT:
+                                    x = x-100;
+                                    arrEnemy.add(new SmallerEnemy(x,y));
+                                    break;
+                                case Enemy.LEFT:                                        
+                                    x = x+100;
+                                    arrEnemy.add(new SmallerEnemy(x,y));
+                                    break;
+                                case Enemy.UP:
+                                    y = y +100;
+                                    arrEnemy.add(new SmallerEnemy(x,y));
+                                    break;
+                                case Enemy.DOWN:  
+                                    y = y -100;
+                                    arrEnemy.add(new SmallerEnemy(x,y));  
+                                    break;
+                            }
+                        }
+                    }
+                    
+                    numberEnemy = Integer.parseInt(arr[2]);
+                    if(numberEnemy>0){
+                        for(int i=0; i<numberEnemy; i++){
+                            switch(orientStart){
+                                case Enemy.RIGHT:
+                                    x = x-100;
+                                    arrEnemy.add(new TankerEnemy(x,y));
+                                    break;
+                                case Enemy.LEFT:                                        
+                                    x = x+100;
+                                    arrEnemy.add(new TankerEnemy(x,y));
+                                    break;
+                                case Enemy.UP:
+                                    y = y +100;
+                                    arrEnemy.add(new TankerEnemy(x,y));
+                                    break;
+                                case Enemy.DOWN: 
+                                    y = y -100;
+                                    arrEnemy.add(new TankerEnemy(x,y));  
+                                    break;
+                            }
+                        }
+                    }
+                    numberEnemy = Integer.parseInt(arr[3]);
+                    if(numberEnemy>0){
+                        for(int i=0; i<numberEnemy; i++){
+                            switch(orientStart){
+                                case Enemy.RIGHT:
+                                    x = x-100;
+                                    arrEnemy.add(new BossEnemy(x,y));
+                                    break;
+                                case Enemy.LEFT:                                        
+                                    x = x+100;
+                                    arrEnemy.add(new BossEnemy(x,y));
+                                    break;
+                                case Enemy.UP:
+                                    y = y +100;
+                                    arrEnemy.add(new BossEnemy(x,y));
+                                    break;
+                                case Enemy.DOWN:  
+                                    y = y -100;
+                                    arrEnemy.add(new BossEnemy(x,y));  
+                                    break;
+                            }
+                        }
+                    }
+                    break;
                 }
                 row++;
                 line = reader.readLine();
@@ -63,6 +161,9 @@ public class GameEntity {
             reader.close();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        for(Enemy e : arrEnemy){
+            e.setOrient(orientStart);
         }
     }
     
@@ -142,14 +243,14 @@ public class GameEntity {
                 arrEnemy.remove(i);
             }
             if(arrEnemy.size()==0){
+                orderRow++;
                 initBoss();
-                start();
             }
         }
         
     }
     
-    public void start(){
+    public int start(){
         GameTile spawner = getSpawner();
         int orientStart;
         if(spawner.getX()==0) {
@@ -162,9 +263,7 @@ public class GameEntity {
         } else {
             orientStart = Enemy.UP;
         }
-        for(Enemy e : arrEnemy){
-            e.setOrient(orientStart);
-        }
+        return orientStart;
     }
     
     public GameTile getSpawner(){
