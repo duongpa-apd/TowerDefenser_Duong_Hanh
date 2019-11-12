@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.sound.sampled.Clip;
 import tower_game.audio.SoundManager;
 import tower_game.gametile.Road;
+import tower_game.gametile.Spawner;
 import tower_game.gametile.Target;
 import tower_game.tower.Bullet;
 
@@ -43,34 +44,82 @@ public class Enemy {
     public void changeOrient(ArrayList<GameTile> arrMaps) {
         int xR, yR;
         GameTile afterRoad = null;
+        System.out.println("orient_" + orient + "(" + x +"," + y +")");
+        if(x<-50 || y<-50) return;
         switch (orient) {
             case LEFT:
-                xR = x-50;
+                afterRoad = findMap(x,y,arrMaps);
+                if(x<= afterRoad.getX() + (50-image.getWidth(null)/2)){
+                    return;
+                }
+                xR = x-25;
                 afterRoad = findMap(xR,y,arrMaps);
                 if(afterRoad instanceof Road || afterRoad instanceof Target){
                     orient = LEFT;
-                } else
+                } else {
+                    afterRoad = findMap(x,y+50,arrMaps);
+                    if(afterRoad instanceof Road || afterRoad instanceof Target){
+                        orient = DOWN;
+                    } else {
+                        orient = UP;
+                    }
+                }
                 break;
             case RIGHT:
-                xR = y-50;
+                xR = x+50;
                 afterRoad = findMap(xR,y,arrMaps);
-                if(afterRoad instanceof Road || afterRoad instanceof Target){
-                    orient = RIGHT;
+                if(afterRoad instanceof Spawner){
+                    return;
+                } else if(x<=findMap(x,y,arrMaps).getX() + (50-image.getWidth(null)/2)){
+                    return;
+                } else if(afterRoad instanceof Road || afterRoad instanceof Target){
+                    return;
+                } else {
+                    afterRoad = findMap(x,y+50,arrMaps);
+                    if(afterRoad instanceof Road || afterRoad instanceof Target){
+                        orient = DOWN;
+                    } else {
+                        orient = UP;
+                    }
                 }
                 break;
             case UP:
-                yR = y-50;
+                afterRoad = findMap(x,y,arrMaps);
+                if(y<=afterRoad.getY() + (50-image.getHeight(null)/2)){
+                    return;
+                }
+                yR = y-25;
                 afterRoad = findMap(x,yR,arrMaps);
                 if(afterRoad instanceof Road || afterRoad instanceof Target){
                     orient = UP;
+                } else {
+                    afterRoad = findMap(x+50,y,arrMaps);
+                    if(afterRoad instanceof Road || afterRoad instanceof Target){
+                        orient = RIGHT;
+                    } else {
+                        orient = LEFT;
+                    }
                 }
                 break;
             case DOWN:
+                afterRoad = findMap(x,y,arrMaps);
+                if(y<=afterRoad.getY() + (50-image.getHeight(null)/2)){
+                    return;
+                }
                 yR = y+50;
                 afterRoad = findMap(x,yR,arrMaps);
                 if(afterRoad instanceof Road || afterRoad instanceof Target){
                     orient = DOWN;
+                } else {
+                    afterRoad = findMap(x+50,y,arrMaps);
+                    if(afterRoad instanceof Road || afterRoad instanceof Target){
+                        orient = RIGHT;
+                    } else {
+                        orient = LEFT;
+                    }
                 }
+                break;
+            default:
                 break;
         }
         
@@ -89,9 +138,6 @@ public class Enemy {
     }
     
     public void move() {
-//        int xR = x;
-//        int yR = y;
-
         switch (orient) {
             case LEFT:
                 x -= speed;
@@ -117,6 +163,25 @@ public class Enemy {
         return rectangle;
     }
     
+    public void setOrient(int orient){
+        this.orient = orient;
+    }
+    
+    public boolean checkFinish(ArrayList<GameTile> arrMaps){
+        GameTile target = null;
+        for(GameTile map : arrMaps){
+            if(map instanceof Target){
+                target = map;
+                break;
+            }
+        }
+        if(x>=target.getX() && y >=target.getY()
+                && x<target.getX()+25 && y<target.getY()+25){
+            return true;
+        }
+        return false;
+    }
+    
     // public boolean checkDie(ArrayList<Bullet> arrBullet){
     //     for(Bullet bullet : arrBullet){
     //         Rectangle rectangle = getRect().intersection(bullet.getRect());
@@ -129,4 +194,6 @@ public class Enemy {
     //     }
     //     return true;
     // }
+    
+    
 }

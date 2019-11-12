@@ -28,15 +28,42 @@ public class GameEntity {
     
     //Bắt đầu màn chơi
     public void initGame(){
+        heart = 20;
+        coin = 200;
         arrBullet = new ArrayList<>();
         arrEnemy = new ArrayList<>();
         arrTower = new ArrayList<>();
         readMap("mapData.txt");
-        
+        initBoss();
     }
     
-    public void initBoss(ArrayList<Enemy> arr){
-        this.arrEnemy.addAll(arr);
+    public void initBoss(){
+        arrEnemy.add(new NormalEnemy(getSpawner().getX()-25, getSpawner().getY()+7));
+        arrEnemy.add(new NormalEnemy(getSpawner().getX()-125, getSpawner().getY()+7));
+        arrEnemy.add(new NormalEnemy(getSpawner().getX()-225, getSpawner().getY()+7));
+        arrEnemy.add(new NormalEnemy(getSpawner().getX()-335, getSpawner().getY()+7));
+        arrEnemy.add(new NormalEnemy(getSpawner().getX()-445, getSpawner().getY()+7));
+    }
+    
+    public void readBoos(int dong){
+        arrMaps = new ArrayList<>();
+        File file = new File("src/maps/boss.txt");
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            int row = 0;
+            String line = reader.readLine();
+            while (line!=null){
+                if(row == dong){
+                    String[] arrInt = line.split(" ");
+                    int numberEnemy = 
+                }
+                row++;
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     public void readMap(String map){
@@ -61,7 +88,6 @@ public class GameEntity {
                             break;
                         case 2 :
                             arrMaps.add(new Spawner(x,y));
-                            arrEnemy.add(new NormalEnemy(x+6, y+6, 5, 1, 10, 10));
                             break;
                         case 3 :
                             arrMaps.add(new Target(x,y));
@@ -88,11 +114,11 @@ public class GameEntity {
             for (GameTile map:arrMaps) {
                 map.draw(g2d);
             }
-            for (Bullet bullet:arrBullet){
-                bullet.draw(g2d);
-            }
             for (Tower tower:arrTower){
                 tower.draw(g2d);
+            }
+            for (Bullet bullet:arrBullet){
+                bullet.draw(g2d);
             }
             for (Enemy enemy:arrEnemy){
                 enemy.draw(g2d);
@@ -101,53 +127,55 @@ public class GameEntity {
             ex.printStackTrace();
         }
     }
+
     
-    public void AI(){
-        for (int i = arrBullet.size()-1; i >=0 ; i--) {
-            boolean check = arrBullet.get(i).move();
-            if (check == false){
-                arrBullet.remove(i);
+    public void setBit(int bit) {
+        this.bit = bit;
+    }
+    
+    public void AI(){    
+        int i;
+        for (i=arrEnemy.size()-1;i>=0; i--) {
+            arrEnemy.get(i).changeOrient(arrMaps);
+            arrEnemy.get(i).move();
+            if(arrEnemy.get(i).checkFinish(arrMaps)){
+                arrEnemy.remove(i);
+            }
+            if(arrEnemy.size()==0){
+                initBoss();
+                start();
             }
         }
         
-        for (int i = 0; i < arrEnemy.size(); i++) {
-            arrEnemy.get(i).changeOrient(arrMaps);
-            arrEnemy.get(i).move();
+    }
+    
+    public void start(){
+        GameTile spawner = getSpawner();
+        int orientStart;
+        if(spawner.getX()==0) {
+            orientStart = Enemy.RIGHT;
+        } else if (spawner.getX()<=GameStage.W_FRAME 
+                && spawner.getX()>=GameStage.W_FRAME-50) {
+            orientStart = Enemy.LEFT;
+        } else if (spawner.getY()==0){
+            orientStart = Enemy.DOWN;
+        } else {
+            orientStart = Enemy.UP;
+        }
+        for(Enemy e : arrEnemy){
+            e.setOrient(orientStart);
         }
     }
     
-    public boolean checkGame(){
-        if(heart == 0 || arrEnemy.size() == 0){
-            return false;
+    public GameTile getSpawner(){
+        GameTile spawner = null;
+        for(GameTile map: arrMaps){
+            if(map instanceof Spawner){
+                spawner = map;
+                break;
+            }
         }
-        return true;
+        return spawner;
     }
-    
-//    public ArrayList<GameTile> getRoad(){
-//        ArrayList<GameTile> arrRoad = new ArrayList<>();
-//        for(GameTile spawner: arrMaps){
-//            if(spawner instanceof Spawner){
-//                arrRoad.add(spawner);
-//                break;
-//            }
-//        }
-//        GameTile head = arrRoad.get(0);
-//        GameTile left = null;
-//        GameTile right = null;
-//        GameTile up = null;
-//        GameTile down = null;
-//        
-//        while(!(head instanceof Target)){
-//            left = findMap(head.getX()+51,head.getY()+51);
-//            right = findMap(head.getX()+51,head.getY()+51);
-//            up = findMap(head.getX()+51,head.getY()+51);
-//            down = findMap(head.getX()+51,head.getY()+51);
-//            if(findMap(head.getX()+51,head.getY()+51) instanceof Road){
-//                
-//            }
-//        }
-//        return arrRoad;
-//    }
-//    
 
-} 
+}

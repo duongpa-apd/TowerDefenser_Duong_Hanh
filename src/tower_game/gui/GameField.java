@@ -12,11 +12,12 @@ public class GameField extends JPanel implements Runnable
 {   
     private GameEntity gameEntity = new GameEntity();
     public boolean isRunning = true ;
-    
+    public int bitSet = 0;
     public GameField ()
     {
         setBackground(Color.BLACK);
         gameEntity.initGame();
+        gameEntity.start();
         setFocusable(true);
         Thread thread = new Thread(this);
         thread.start();
@@ -36,16 +37,6 @@ public class GameField extends JPanel implements Runnable
     public void run() {
         while (isRunning){
             gameEntity.AI();
-            // if (isRunning == false){
-            //     int result = JOptionPane.showConfirmDialog(null,"Do you want to replay?",
-            //             "Game over",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
-            //     if (result == JOptionPane.YES_OPTION){
-            //         gameEntity.initGame();
-            //         isRunning = true;
-            //     }else{
-            //         System.exit(0);
-            //     }
-            // }
             repaint();
             try {
                 Thread.sleep(10);
