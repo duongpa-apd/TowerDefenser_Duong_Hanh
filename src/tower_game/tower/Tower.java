@@ -59,7 +59,10 @@ public class Tower {
     {
         return this.y ;
     }
-    
+    public int getCost ()
+    {
+        return this.cost ;
+    }
     public void draw(Graphics2D g2d) {
         g2d.drawImage(image, x, y, 50, 50, null);
     }
@@ -82,8 +85,8 @@ public class Tower {
         int towerX = (int) x / 50;
         int towerY = (int) y / 50;
         
-        int towerRadius = this.limit ;
-        int enemyRadius = 1 ;
+        int towerLimit = this.limit ;
+        int enemyLimit = 1 ;
         
         int enemyX ;
         int enemyY ;
@@ -98,7 +101,7 @@ public class Tower {
                 int dx = enemyX - towerX ;
                 int dy = enemyY - towerY ;
                 
-                int dradius = towerRadius + enemyRadius ;
+                int dradius = towerLimit + enemyLimit ;
                 if (dx * dx + dy * dy < dradius * dradius)
                 {
                     enemyInRange.add(enemy) ;
@@ -136,14 +139,6 @@ public class Tower {
     public void TowerAttack (int x, int y, Enemy enemy)
     {
         enemy.setHealth(enemy.getHealth() - this.damage) ;
-        for (Bullet bullet: GameEntity.arrBullet)
-        {
-            if (bullet == null)
-            {
-                GameEntity.arrBullet.add(new Bullet (x + 50 *2 , y + 50 * 3, 10, 3, enemy));
-                break ;
-            }
-        }
     }
 
 }

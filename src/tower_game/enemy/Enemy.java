@@ -203,7 +203,7 @@ public class Enemy {
         this.orient = orient;
     }
     
-    public boolean checkFinish(ArrayList<GameTile> arrMaps){
+    public boolean checkFinish(ArrayList<GameTile> arrMaps ){
         GameTile target = null;
         for(GameTile map : arrMaps){
             if(map instanceof Target == true){
@@ -211,7 +211,9 @@ public class Enemy {
                 break;
             }
         }
-        if(this.x>=target.getX() && this.y >=target.getY()
+        int xPos = this.x / 50 ;
+        int yPos = this.y / 50 ;
+        if(this.x>=target.getX()-50 && this.y >=target.getY()+50
                 &&this.x<target.getX()+100 && this.y<target.getY()+100){
             return true;
         }

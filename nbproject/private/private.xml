@@ -12,7 +12,13 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Duy/Desktop/TheGameOp1-20191119T054138Z-001/TheGameOp1/src/tower_game/gui/GameEntity.java</file>
+            <file>file:/C:/Users/Hacha/OneDrive/Máy%20tính/Oops%20Game/TheGameOp1/src/tower_game/enemy/Enemy.java</file>
+            <file>file:/C:/Users/Hacha/OneDrive/Máy%20tính/Oops%20Game/TheGameOp1/src/tower_game/gui/GameField.java</file>
+            <file>file:/C:/Users/Hacha/OneDrive/Máy%20tính/Oops%20Game/TheGameOp1/src/tower_game/gui/GameEntity.java</file>
+            <file>file:/C:/Users/Hacha/OneDrive/Máy%20tính/Oops%20Game/TheGameOp1/src/maps/boss.txt</file>
+            <file>file:/C:/Users/Hacha/OneDrive/Máy%20tính/Oops%20Game/TheGameOp1/src/maps/mapData.txt</file>
+            <file>file:/C:/Users/Hacha/OneDrive/Máy%20tính/Oops%20Game/TheGameOp1/src/tower_game/tower/Bullet.java</file>
+            <file>file:/C:/Users/Hacha/OneDrive/Máy%20tính/Oops%20Game/TheGameOp1/src/tower_game/tower/MachineGunTower.java</file>
         </group>
     </open-files>
 </project-private>

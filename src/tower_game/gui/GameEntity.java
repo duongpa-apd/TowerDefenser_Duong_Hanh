@@ -62,7 +62,14 @@ public class GameEntity {
     {
         this.gameField = gameField ;
     }
-    
+    public int getHeart ()
+    {
+        return this.heart ;
+    }
+    public void setHeart (int heart)
+    {
+        this.heart = heart;
+    }
     //Bắt đầu màn chơi
     public void initGame(){
         heart = 20;
@@ -83,6 +90,7 @@ public class GameEntity {
         int x = spawer.getX();
         int y = spawer.getY();
         int orientStart = start();
+        System.out.println(orientStart);
         File file = new File("src/maps/boss.txt");
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -251,11 +259,11 @@ public class GameEntity {
     public void draw(Graphics2D g2d){
         try{
             for (GameTile map:arrMaps) {
+               
                 map.draw(g2d);
             }
-            if (this.gameField.isWaiting == true)
-            {
-                if (isBuying == false && isDisplaying == true )
+          
+            if (isBuying == false && isDisplaying == true )
                 {
                     Image buying_menu = new ImageIcon(getClass().getResource("/images/buyingMenu.png")).getImage();
                     g2d.drawImage(buying_menu, 0, this.gameField.gameStage.getHeight() - buying_menu.getHeight(null) / 2 - 30, 360, 70, null) ;
@@ -264,7 +272,6 @@ public class GameEntity {
                         towerList[i].draw(g2d);
                     }
                 }
-            }
             if (isBuying == true )
             {
                 isDisplaying = false ;
@@ -322,7 +329,27 @@ public class GameEntity {
             arrEnemy.get(i).changeOrient(arrMaps);
             arrEnemy.get(i).move();
             if(arrEnemy.get(i).checkFinish(arrMaps)){
-                arrEnemy.remove(i);
+                
+                int hp = 0 ;
+                if (arrEnemy.get(i) instanceof NormalEnemy == true)
+                        {
+                            hp = 1 ;
+                        }
+                        else if (arrEnemy.get(i) instanceof SmallerEnemy == true)
+                        {
+                            hp = 1 ;
+                        }
+                        else if (arrEnemy.get(i) instanceof TankerEnemy == true)
+                        {
+                            hp = 2 ;
+                        }
+                        else if (arrEnemy.get(i) instanceof BossEnemy == true)
+                        {
+                            hp = 3;
+                        }
+                       
+                        this.heart -= hp ;
+                        arrEnemy.remove(i);
             }
             if(arrEnemy.size()==0){
                 orderRow++;
@@ -391,8 +418,8 @@ public class GameEntity {
             if (arrBullet.get(i)!= null)
             {
                 Bullet bullet = arrBullet.get(i) ;
-                bullet.update(); 
-                if (bullet.target == null)
+                
+                if (bullet == null)
                 {
                     arrBullet.remove(i) ;
                 }
@@ -536,12 +563,22 @@ public class GameEntity {
                
                 switch (id)
                 {
-                    case 0 : this.arrTower.add(new NormalTower (xPos * 50, yPos * 50)) ; break ;
-                    case 1 : this.arrTower.add(new SniperTower (xPos * 50, yPos * 50)) ; break ;
-                    case 2 : this.arrTower.add(new MachineGunTower (xPos * 50, yPos * 50)) ; break ;
-                }
-     
-                
+                    case 0 : if (this.coin >= this.towerList[0].getCost ()){
+                        this.arrTower.add(new NormalTower (xPos * 50, yPos * 50)) ;
+                        this.coin -= this.towerList[0].getCost () ;
+                    }
+                        else System.out.println ("You can't afford for this Tower!" ) ;break ;
+                    case 1 : if (this.coin >= this.towerList[1].getCost ()){
+                        this.arrTower.add(new SniperTower (xPos * 50, yPos * 50)) ;
+                        this.coin -= this.towerList[1].getCost () ;
+                    } 
+                        else System.out.println ("You can't afford for this Tower!" ) ;break ;
+                    case 2 : if (this.coin >= this.towerList[2].getCost ()){
+                        this.arrTower.add(new MachineGunTower (xPos * 50, yPos * 50)) ;
+                        this.coin -= this.towerList[2].getCost () ;
+                    } 
+                        else System.out.println ("You can't afford for this Tower!" ) ;break ;
+                }      
                 return true ;
             }  
             return false ;
@@ -631,7 +668,10 @@ public class GameEntity {
            }
            else if (this.gameField.isWaiting == true && isBuying == false && isDisplaying == false)
             {this.isDisplaying = true;}
-           
+           else if (this.gameField.isWaiting == false && isBuying == false && isDisplaying == false)
+           {
+               this.isDisplaying = true;
+           }
            else this.gameField.isWaiting = false ;
         }
         

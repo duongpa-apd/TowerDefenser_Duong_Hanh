@@ -6,7 +6,7 @@ public class EmptyBox extends GameTile{
 
     public EmptyBox(int x, int y) {
         super(x, y);
-        image = new ImageIcon(getClass().getResource("/images/img_emptybox.png")).getImage();
+        image = new ImageIcon(getClass().getResource("/images/land_background.jpg")).getImage();
     }
     
 }

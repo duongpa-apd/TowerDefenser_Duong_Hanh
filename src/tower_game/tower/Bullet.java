@@ -23,14 +23,14 @@ public class Bullet {
         this.limit = limit;
         this.damage = damage;
     }
-    public Bullet (int x, int y, int speedFire, int damage, Enemy target)
+    public Bullet (int x, int y, int speedFire, int damage, int limit, Enemy target)
     {
         this.x = x ;
         this.y = y ;
         this.speedFire = speedFire ;
         this.damage = damage ;
+        this.limit = limit ;
         this.target = target ;
-        updateOrient();
     }
     public void draw(Graphics2D g2d) {
         g2d.drawImage(image, this.x, this.y, 15, 15, null);
@@ -52,26 +52,5 @@ public class Bullet {
                 ,image.getHeight(null));
         return rectangle;
     }
-    public void update ()
-    {
-        updateOrient(); 
-        this.x += speedFire * Math.cos(orient) ;
-        this.y += speedFire * Math.sin(orient) ;
-        checkTarget () ;
-    }
-    public void checkTarget ()
-    {
-        int deltaX =  (int) (50 + (double) this.target.getX() / 50 *2- 50/2 - (double)this.x / 50) ;
-        int deltaY = (int) (50 * 3 + (double) this.target.getY() / 50- 50 /2 - (double)this.y / 50 -15);
-        int deltaRadius = 1 +1 ;
-        if (deltaX * deltaX + deltaY * deltaY < deltaRadius * deltaRadius)
-        {
-            this.target.setHealth(this.target.getHealth() - this.damage);
-            this.target = null ;
-        }
-    }
-    public void updateOrient ()
-    {
-        this.orient = Math.atan2(50 * 3 + (double) this.target.getY() / 50- 50 /2 - (double)this.y / 50 -15, 50 + (double) this.target.getX() / 50 *2- 50/2 - (double)this.x / 50);
-    }
+    
 }

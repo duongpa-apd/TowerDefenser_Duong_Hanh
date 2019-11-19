@@ -12,7 +12,12 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
+import tower_game.enemy.BossEnemy;
 import tower_game.enemy.Enemy;
+import tower_game.enemy.NormalEnemy;
+import tower_game.enemy.SmallerEnemy;
+import tower_game.enemy.TankerEnemy;
+import tower_game.tower.MachineGunTower;
 
 public class GameField extends JPanel implements Runnable
 {   
@@ -46,7 +51,9 @@ public class GameField extends JPanel implements Runnable
         super.paintComponent(g2d);
         if (Starting == true )
         {
-            gameEntity.draw(g2d);
+                Image start_img = new ImageIcon(getClass().getResource("/images/01_Background_Games.png")).getImage();
+                g2d.drawImage(start_img, 0, 0, gameStage.getWidth(), gameStage.getHeight(), null);
+                gameEntity.draw(g2d);
         }
         else 
         {
@@ -65,16 +72,19 @@ public class GameField extends JPanel implements Runnable
     public void run() {
         
         while (isRunning){
+            
             if (isWaiting == false ) gameEntity.AI();
-            repaint();
             this.gameEntity.towerUpdate();
             this.gameEntity.enemyUpdate(); 
             this.gameEntity.bulletUpdate();
-            for (Enemy enemy :this.gameEntity.arrEnemy)
-            {
-                if (enemy.checkFinish(this.gameEntity.arrMaps ) == true)
-                    isExiting = true ;
+            
+            if (this.gameEntity.getHeart() <= 0) {
+                System.out.print("Game Over!");
+               isExiting = true ;
             }
+            
+            repaint();
+            
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
