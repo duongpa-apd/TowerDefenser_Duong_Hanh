@@ -15,7 +15,7 @@ public class NormalEnemy extends Enemy{
 
     public NormalEnemy(int x, int y) {
         super(x, y, 5, 3, 10, 10);
-        image = new ImageIcon(getClass().getResource("/images/img_normalenemy.png")).getImage();
+        image = new ImageIcon(getClass().getResource("/images/enemy/normalEnemy.png")).getImage();
     }
    
     

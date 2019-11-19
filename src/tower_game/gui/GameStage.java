@@ -17,7 +17,7 @@ public class GameStage extends JFrame
         setLocationRelativeTo(null);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        gameField = new GameField () ;
+        gameField = new GameField (this) ;
         this.add(gameField) ;
         setVisible(true);
  

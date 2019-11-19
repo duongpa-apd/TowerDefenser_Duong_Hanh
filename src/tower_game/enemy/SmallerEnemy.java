@@ -6,7 +6,7 @@ public class SmallerEnemy extends Enemy{
 
     public SmallerEnemy(int x, int y){
         super(x, y, 5, 10, 10, 10);
-        image = new ImageIcon(getClass().getResource("/images/img_smallerenemy.png")).getImage();
+        image = new ImageIcon(getClass().getResource("/images/enemy/smallerEnemy.png")).getImage();
     }
     
     

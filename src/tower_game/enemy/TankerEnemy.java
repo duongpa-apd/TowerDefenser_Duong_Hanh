@@ -6,7 +6,7 @@ public class TankerEnemy extends Enemy{
 
     public TankerEnemy(int x, int y) {
         super(x, y, 1, 1, 10, 10);
-        image = new ImageIcon(getClass().getResource("/images/img_tankerenemy.png")).getImage();
+        image = new ImageIcon(getClass().getResource("/images/enemy/tankerEnemy.png")).getImage();
     }
     
     

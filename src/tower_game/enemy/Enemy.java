@@ -1,5 +1,6 @@
 package tower_game.enemy;
 
+import java.awt.Color;
 import tower_game.gametile.GameTile;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -29,6 +30,7 @@ public class Enemy {
     protected Image image;
     private int orient;
 
+    private int HEART ;
     public Enemy(int x, int y, int heart, int speed, int defense, int reward) {
         this.x = x;
         this.y = y;
@@ -36,10 +38,35 @@ public class Enemy {
         this.speed = speed;
         this.defense = defense;
         this.reward = reward;
+        this.HEART = heart ;
     }
     
+    
+    public int getX ()
+    {
+        return this.x ;
+    }
+    public int getY ()
+    {
+        return this.y ;
+    }
+    public int getHealth ()
+    {
+        return this.heart ;
+    }
+    public int getReward ()
+    {
+        return this.reward ;
+    }
+    public void setHealth (int heart)
+    {
+        this.heart = heart ;
+    }
     public void draw(Graphics2D g2d) {
         g2d.drawImage(image, x, y, 25, 25, null);
+        g2d.setColor(Color.red);
+        int width_rect_heart = (int) (25 * ((double) this.heart / (double)this.HEART));
+        g2d.fillRect(x, y - 15, width_rect_heart, 7);
     }
 
     public void changeOrient(ArrayList<GameTile> arrMaps) {
@@ -179,18 +206,27 @@ public class Enemy {
     public boolean checkFinish(ArrayList<GameTile> arrMaps){
         GameTile target = null;
         for(GameTile map : arrMaps){
-            if(map instanceof Target){
+            if(map instanceof Target == true){
                 target = map;
                 break;
             }
         }
-        if(x>=target.getX() && y >=target.getY()
-                && x<target.getX()+25 && y<target.getY()+25){
+        if(this.x>=target.getX() && this.y >=target.getY()
+                &&this.x<target.getX()+100 && this.y<target.getY()+100){
             return true;
         }
         return false;
     }
     
+    public Enemy update ()
+    {
+        Enemy currentEnemy = this ;
+        if (currentEnemy.heart <= 0)
+        {
+            return null ;
+        }
+        return currentEnemy ;
+    }
     // public boolean checkDie(ArrayList<Bullet> arrBullet){
     //     for(Bullet bullet : arrBullet){
     //         Rectangle rectangle = getRect().intersection(bullet.getRect());
