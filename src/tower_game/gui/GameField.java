@@ -147,6 +147,7 @@ public class GameField extends JPanel implements Runnable
                 {
                     gameEntity.fileSave.delete() ;
                 }
+                isWaiting = true ;
                 isExiting = true ;
             }
            

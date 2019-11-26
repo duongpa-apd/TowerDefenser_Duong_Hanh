@@ -1088,6 +1088,7 @@ public class GameEntity {
                     {
                         fileSave.delete() ;
                     }
+                //if (this.gameField.isWaiting == true) this.gameField.isWaiting = false ;
                 this.gameField.isExiting = false ;
                 isDownDisplay = true ;
             }
