@@ -10,7 +10,7 @@ import java.io.InputStream;
 
 
 public class SoundManager {
-    public static Clip getSound(String name){
+    public Clip getSound(String name){
         try {
             File file = new File("src/sounds/"+name);
             AudioInputStream stream = AudioSystem.getAudioInputStream(file);

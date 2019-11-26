@@ -5,6 +5,7 @@ import tower_game.gametile.GameTile;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.Serializable;
 import java.util.ArrayList;
 import javax.sound.sampled.Clip;
 import tower_game.audio.SoundManager;
@@ -14,7 +15,7 @@ import tower_game.gametile.Target;
 import tower_game.gui.GameStage;
 import tower_game.tower.Bullet;
 
-public class Enemy {
+public class Enemy implements Serializable{
 
     public static final int LEFT = 0;
     public static final int RIGHT = 1;
@@ -58,15 +59,28 @@ public class Enemy {
     {
         return this.reward ;
     }
+    public int getOrient ()
+    {
+        return this.orient ;
+    }
     public void setHealth (int heart)
     {
         this.heart = heart ;
     }
+    public void setOrient (int orient)
+    {
+        this.orient = orient ;
+    }
     public void draw(Graphics2D g2d) {
         g2d.drawImage(image, x, y, 25, 25, null);
+        g2d.setColor(Color.BLUE);
+        g2d.fillRect(x, y - 15, 25, 7);
         g2d.setColor(Color.red);
-        int width_rect_heart = (int) (25 * ((double) this.heart / (double)this.HEART));
-        g2d.fillRect(x, y - 15, width_rect_heart, 7);
+        
+        double heart_scale = (double) this.heart / ((double) this.HEART) ;
+   
+        double change_heart = heart_scale * 25 ;
+        g2d.fillRect(x, y - 15, (int)change_heart, 7);
     }
 
     public void changeOrient(ArrayList<GameTile> arrMaps) {
@@ -123,6 +137,7 @@ public class Enemy {
                 afterRoad = findMap(x,y,arrMaps);
                 if(y<=afterRoad.getY() + (50-image.getHeight(null)/2)){
                     return;
+                    
                 }
                 yR = y-25;
                 afterRoad = findMap(x,yR,arrMaps);
@@ -192,16 +207,15 @@ public class Enemy {
     }
     
     public Rectangle getRect(){
-        int w = image.getWidth(null);
-        int h = image.getHeight(null);
-        
+       // int w = image.getWidth(null);
+       // int h = image.getHeight(null);
+        int w = 50;
+        int h =50;
         Rectangle rectangle = new Rectangle(x,y,w,h);
         return rectangle;
     }
     
-    public void setOrient(int orient){
-        this.orient = orient;
-    }
+   
     
     public boolean checkFinish(ArrayList<GameTile> arrMaps ){
         GameTile target = null;
